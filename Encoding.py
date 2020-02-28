@@ -45,9 +45,12 @@ print(shirt.head())
 # per risparmiarci di costruire una funzione con vari cicli annidati
 # possiamo servirci del metodo vectorize all'interno della quale
 # creeremo la funzione lambda di associazione
+# SIGNIFICATO: tale funzione mi da la possibilità di estendere la funzione
+#  lambda a paramentri vettoriali così da poter avere funzioni applicabili su vettori di "t"
 fmap = np.vectorize(lambda t: size_mapping[t])
 # ora applichiamo la funzione fmap appena creata sulla
 # colonna dell'array che si riferisce alla mappa (che sarebbe la prima)
+# fmap fa applicare size_mapping a tutto il vettore delle sole taglie (colonna 0)
 X[:, 0] = fmap(X[:, 0])
 print(X[:5])
 
@@ -57,8 +60,9 @@ print(X[:5])
 #           si useranno valori booleani per item che rappresenteranno
 #           l'appartenenza o meno dell'item a quella categoria (bianco, verde o altro)
 #           si usa la funzione get_dummies di pandas
-shirt = pd.get_dummies(shirt, columns=["colore"])
-print(shirt.head())
+shirt_dummies = shirt.copy()
+shirt_dummies = pd.get_dummies(shirt, columns=["colore"])
+print(shirt_dummies.head())
 #    taglia  prezzo  colore_bianco  colore_rosso  colore_verde
 # 0       0    4.99              1             0             0
 # 1       1   19.99              1             0             0
@@ -67,7 +71,7 @@ print(shirt.head())
 # 4       0   14.99              1             0             0
 
 # Se il nostro dataset è un array numpy possiamo utilizzare la classe OneHotEncoder di scikit-learn.
-# Per eseguire il One Hot Encoding su solamente una o più colonne del dataset possiamo sfruttare la classe ColumnTransformer,
+# Per eseguire il OneHotEncoding su solamente una o più colonne del dataset possiamo sfruttare la classe ColumnTransformer,
 # questa richiede in input una lista di tuple, in cui ogni tupla corrisponde ad una trasformazione da eseguire su una
 # colonna che contiene i seguenti elementi:
 #
@@ -78,7 +82,7 @@ print(shirt.head())
 # Il comportamente sulle colonne non trasformate viene definito tramite il parametro remainder,
 # se questo è uguale a "drop" esse verranno rimosse, se invece è uguale a "passthrough"
 # verranno passate immutate all'array numpy di output del ColumnTransformer.
-from sklearn.preprocessing import LabelEncoder
+
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
@@ -90,6 +94,7 @@ X = ct.fit_transform(X)
 print(X[:5])
 #le prime tre colonne rappresentano la classe-colore (bianco, rosso e verde),
 # la quarta la taglia e la quinta il prezzo
+
 
 
 
